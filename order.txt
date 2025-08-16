@@ -1,0 +1,60 @@
+=== DATA PESANAN MEMBERSHIP GYM ===
+Tanggal Export: 21/12/2023, 17:30:45
+Total Pesanan: 2
+
+=== PESANAN #1 ===
+Order ID: GYM-1703123456789-123
+Tanggal: 21/12/2023, 10:30:56
+Status: Pending
+
+DATA CUSTOMER:
+Nama: John Doe
+Telepon: 08123456789
+Email: john@email.com
+
+DETAIL PESANAN:
+Paket: Premium
+Detail Paket: Premium - Rp 499.000/bulan (Terpopuler)
+Durasi: 6 bulan
+Harga per Bulan: Rp 499,000
+Total Harga: Rp 2,994,000
+Diskon: 10%
+Harga Akhir: Rp 2,694,600
+
+Pesan Tambahan: Mau mulai bulan depan
+
+WhatsApp Terkirim: Ya
+
+==========================================
+
+=== PESANAN #2 ===
+Order ID: GYM-1703123456789-456
+Tanggal: 21/12/2023, 14:15:30
+Status: Pending
+
+DATA CUSTOMER:
+Nama: Jane Smith
+Telepon: 08765432109
+Email: jane@email.com
+
+DETAIL PESANAN:
+Paket: Basic
+Detail Paket: Basic - Rp 299.000/bulan
+Durasi: 3 bulan
+Harga per Bulan: Rp 299,000
+Total Harga: Rp 897,000
+Diskon: 5%
+Harga Akhir: Rp 852,150
+
+Pesan Tambahan: Trial membership dulu
+
+WhatsApp Terkirim: Ya
+
+==========================================
+
+=== RINGKASAN ===
+Total Revenue: Rp 3,546,750
+Paket Terpopuler: Premium
+Rata-rata Durasi: 4.5 bulan
+
+=== END OF REPORT ===
