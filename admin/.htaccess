@@ -1,0 +1,47 @@
+# ========================================
+# ADMIN DIRECTORY SECURITY
+# ========================================
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect against access to sensitive files
+<Files "*.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Allow only HTML files
+<Files "*.html">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Block access to config files
+<Files "*.sql">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "*.txt">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Custom error pages
+ErrorDocument 403 /admin/login.html
+ErrorDocument 404 /admin/login.html
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Prevent access to hidden files
+<Files ".*">
+    Order Allow,Deny
+    Deny from all
+</Files>

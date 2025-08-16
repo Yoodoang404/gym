@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - FitLife Gym</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .admin-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .stat-card h3 {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        
+        .stat-card .label {
+            color: #495057;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .controls {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-group label {
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .filter-group select, .filter-group input {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .filter-group select:focus, .filter-group input:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #495057;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        .orders-table {
+            padding: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 50px;
+            color: #e74c3c;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .pagination button {
+            padding: 8px 15px;
+            border: 1px solid #e9ecef;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pagination button:hover {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+        
+        .pagination button.active {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .orders-table {
+                padding: 15px;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1><i class="fas fa-dumbbell"></i> FitLife Gym Admin</h1>
+                    <p>Panel Administrasi untuk Mengelola Pesanan Membership</p>
+                </div>
+                <button onclick="logout()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <h3>Total Pesanan</h3>
+                <div class="number" id="totalOrders">-</div>
+                <div class="label">Semua waktu</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Revenue</h3>
+                <div class="number" id="totalRevenue">-</div>
+                <div class="label">Pendapatan</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pesanan Pending</h3>
+                <div class="number" id="pendingOrders">-</div>
+                <div class="label">Menunggu konfirmasi</div>
+            </div>
+            <div class="stat-card">
+                <h3>Rata-rata Durasi</h3>
+                <div class="number" id="avgDuration">-</div>
+                <div class="label">Bulan</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="filter-group">
+                <label>Status:</label>
+                <select id="statusFilter">
+                    <option value="">Semua Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Paket:</label>
+                <select id="planFilter">
+                    <option value="">Semua Paket</option>
+                    <option value="Basic">Basic</option>
+                    <option value="Premium">Premium</option>
+                    <option value="VIP">VIP</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Urutkan:</label>
+                <select id="sortBy">
+                    <option value="created_at">Tanggal</option>
+                    <option value="customer_name">Nama</option>
+                    <option value="final_price">Harga</option>
+                    <option value="status">Status</option>
+                </select>
+                <select id="sortDir">
+                    <option value="DESC">Terbaru</option>
+                    <option value="ASC">Terlama</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" onclick="loadOrders()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            
+            <button class="btn btn-success" onclick="exportToExcel()">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </button>
+        </div>
+        
+        <div class="orders-table">
+            <div id="ordersContent">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p>Memuat data pesanan...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check admin authentication
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            const loginTime = localStorage.getItem('adminLoginTime');
+            
+            if (!isLoggedIn || !loginTime) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Check if login is still valid (24 hours)
+            const currentTime = Date.now();
+            const timeDiff = currentTime - parseInt(loginTime);
+            const hoursDiff = timeDiff / (1000 * 60 * 60);
+            
+            if (hoursDiff >= 24) {
+                // Login expired, clear storage and redirect
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminLoginTime');
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminLoginTime');
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Global variables
+        let currentOrders = [];
+        let currentPage = 1;
+        const ordersPerPage = 20;
+        
+        // Load orders when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication first
+            checkAuth();
+            
+            loadOrders();
+            
+            // Add event listeners for filters
+            document.getElementById('statusFilter').addEventListener('change', loadOrders);
+            document.getElementById('planFilter').addEventListener('change', loadOrders);
+            document.getElementById('sortBy').addEventListener('change', loadOrders);
+            document.getElementById('sortDir').addEventListener('change', loadOrders);
+        });
+        
+        // Load orders from server
+        async function loadOrders() {
+            try {
+                const statusFilter = document.getElementById('statusFilter').value;
+                const planFilter = document.getElementById('planFilter').value;
+                const sortBy = document.getElementById('sortBy').value;
+                const sortDir = document.getElementById('sortDir').value;
+                
+                // Build query string
+                const params = new URLSearchParams({
+                    limit: ordersPerPage,
+                    offset: (currentPage - 1) * ordersPerPage,
+                    order_by: sortBy,
+                    order_dir: sortDir
+                });
+                
+                if (statusFilter) params.append('status', statusFilter);
+                if (planFilter) params.append('plan_type', planFilter);
+                
+                const response = await fetch(`../api/get_orders.php?${params}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentOrders = result.data.orders;
+                    displayOrders(result.data);
+                    updateStats(result.data.statistics);
+                } else {
+                    showError('Gagal memuat data: ' + result.message);
+                }
+                
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                showError('Gagal koneksi ke server');
+            }
+        }
+        
+        // Display orders in table
+        function displayOrders(data) {
+            const { orders, pagination } = data;
+            
+            if (orders.length === 0) {
+                document.getElementById('ordersContent').innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-inbox fa-2x"></i>
+                        <p>Tidak ada pesanan ditemukan</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Paket</th>
+                            <th>Durasi</th>
+                            <th>Harga</th>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            orders.forEach(order => {
+                tableHTML += `
+                    <tr>
+                        <td><strong>${order.order_id}</strong></td>
+                        <td>
+                            <div><strong>${order.customer.name}</strong></div>
+                            <div style="font-size: 0.8rem; color: #6c757d;">
+                                ${order.customer.phone}<br>
+                                ${order.customer.email}
+                            </div>
+                        </td>
+                        <td>
+                            <div><strong>${order.order.plan_type}</strong></div>
+                            <div style="font-size: 0.8rem; color: #6c757d;">
+                                ${order.order.plan_details}
+                            </div>
+                        </td>
+                        <td>${order.order.duration} bulan</td>
+                        <td>
+                            <div><strong>Rp ${order.order.final_price.toLocaleString('id-ID')}</strong></div>
+                            ${order.order.discount_percent > 0 ? 
+                                `<div style="font-size: 0.8rem; color: #e74c3c;">
+                                    Diskon ${order.order.discount_percent}%
+                                </div>` : ''
+                            }
+                        </td>
+                        <td>
+                            <span class="status-badge status-${order.status.toLowerCase()}">
+                                ${order.status}
+                            </span>
+                        </td>
+                        <td>
+                            <div>${new Date(order.created_at).toLocaleDateString('id-ID')}</div>
+                            <div style="font-size: 0.8rem; color: #6c757d;">
+                                ${new Date(order.created_at).toLocaleTimeString('id-ID')}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-primary" onclick="viewOrder('${order.id}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-success" onclick="updateStatus('${order.id}', 'Confirmed')">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="updateStatus('${order.id}', 'Completed')">
+                                    <i class="fas fa-flag-checkered"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            // Add pagination
+            if (pagination.total > ordersPerPage) {
+                tableHTML += createPagination(pagination);
+            }
+            
+            document.getElementById('ordersContent').innerHTML = tableHTML;
+        }
+        
+        // Create pagination controls
+        function createPagination(pagination) {
+            const totalPages = Math.ceil(pagination.total / ordersPerPage);
+            let paginationHTML = '<div class="pagination">';
+            
+            // Previous button
+            paginationHTML += `
+                <button onclick="changePage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    paginationHTML += `
+                        <button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    paginationHTML += '<button disabled>...</button>';
+                }
+            }
+            
+            // Next button
+            paginationHTML += `
+                <button onclick="changePage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            paginationHTML += '</div>';
+            return paginationHTML;
+        }
+        
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            loadOrders();
+        }
+        
+        // Update statistics display
+        function updateStats(stats) {
+            document.getElementById('totalOrders').textContent = stats.total_orders.toLocaleString('id-ID');
+            document.getElementById('totalRevenue').textContent = 'Rp ' + stats.total_revenue.toLocaleString('id-ID');
+            document.getElementById('pendingOrders').textContent = stats.pending_orders.toLocaleString('id-ID');
+            document.getElementById('avgDuration').textContent = stats.avg_duration.toFixed(1);
+        }
+        
+        // View order details
+        function viewOrder(orderId) {
+            const order = currentOrders.find(o => o.id == orderId);
+            if (order) {
+                alert(`
+Order Details:
+ID: ${order.order_id}
+Customer: ${order.customer.name}
+Phone: ${order.customer.phone}
+Email: ${order.customer.email}
+Plan: ${order.order.plan_type}
+Duration: ${order.order.duration} bulan
+Price: Rp ${order.order.final_price.toLocaleString('id-ID')}
+Status: ${order.status}
+Message: ${order.order.message || 'Tidak ada'}
+                `);
+            }
+        }
+        
+        // Update order status
+        async function updateStatus(orderId, newStatus) {
+            if (confirm(`Ubah status pesanan menjadi "${newStatus}"?`)) {
+                try {
+                    const response = await fetch('../api/update_status.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            order_id: orderId,
+                            status: newStatus
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showNotification(`Status berhasil diubah menjadi ${newStatus}`, 'success');
+                        loadOrders(); // Reload data
+                    } else {
+                        showNotification('Gagal mengubah status: ' + result.message, 'error');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error updating status:', error);
+                    showNotification('Gagal koneksi ke server', 'error');
+                }
+            }
+        }
+        
+        // Export to Excel
+        function exportToExcel() {
+            // This would need a proper Excel export library
+            alert('Fitur export Excel akan segera tersedia!');
+        }
+        
+        // Show error message
+        function showError(message) {
+            document.getElementById('ordersContent').innerHTML = `
+                <div class="error">
+                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 10000;
+                max-width: 400px;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.innerHTML = message;
+            
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
